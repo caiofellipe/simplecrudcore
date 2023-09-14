@@ -1,0 +1,2 @@
+# simplecrudcore
+Simple CRUD Core
