@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.simplecrudcore.dto.ClientDTO;
+import br.com.simplecrudcore.dto.ResponseDTO;
 import br.com.simplecrudcore.service.ClientService;
 
 @RestController
@@ -37,8 +38,8 @@ public class ClientController {
 		return ResponseEntity.ok(clientService.update(clientDTO));
 	}
 	
-	@PutMapping("/disable")
-	public ResponseEntity<String> disableClient(@RequestBody ClientDTO clientDTO) {
-		return ResponseEntity.ok(clientService.disable(clientDTO));
+	@PutMapping("/disableorenable")
+	public ResponseEntity<ResponseDTO> disableOrEnableClient(@RequestBody ClientDTO clientDTO) {
+		return ResponseEntity.ok(clientService.disableOrEnable(clientDTO));
 	}
 }

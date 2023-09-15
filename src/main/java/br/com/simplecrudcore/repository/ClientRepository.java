@@ -21,6 +21,4 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
 	@Query(value = "SELECT c, p FROM Client c INNER JOIN Phone p ON p.client.id = c.id WHERE c.id = :id")
 	Client findClientId(Long id);
 	
-	@Query(value = "UPDATE Client c SET c.active = false WHERE c.id = :id")
-	Client disableClient(Long id);
 }

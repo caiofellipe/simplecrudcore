@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.simplecrudcore.dto.ClientDTO;
+import br.com.simplecrudcore.dto.ResponseDTO;
 import br.com.simplecrudcore.dto.mapper.ClientMapper;
 import br.com.simplecrudcore.exception.ClientException;
 import br.com.simplecrudcore.model.Client;
@@ -72,7 +73,7 @@ public class ClientService {
 	}
 	
 	public ClientDTO update(ClientDTO clientDTO) {
-		Client client = clientRepository.findClientId(clientDTO.id());
+		Client client = clientRepository.findById(clientDTO.id()).get();
 		
 		if(client == null) {
 			throw new ClientException("Não Encontrado");
@@ -100,12 +101,30 @@ public class ClientService {
 				clientRepository.save(client));
 	}
 	
-	public String disable(ClientDTO clientDTO) {
-		Client client = clientRepository.disableClient(clientDTO.id());
+	public ResponseDTO disableOrEnable(ClientDTO clientDTO) {
+		Client client = clientRepository.findById(clientDTO.id()).get();
+		ResponseDTO responseDTO = null;
 		
-		return "Usuario " + client.getName() + " desabilitado";
+		if(client == null) {
+			throw new ClientException("Não Encontrado");
+		}
+		
+		if(!clientDTO.active()) {
+			client.setActive(true);
+			responseDTO = new ResponseDTO("Cliente "+ client.getName() + " foi ativado.");
+		}
+
+		if(clientDTO.active()) {
+			client.setActive(false);
+			responseDTO = new ResponseDTO("Cliente "+ client.getName() + " foi desativado.");
+		}
+		
+		clientRepository.save(client);
+		
+		return responseDTO;
 	}
 
+	
 	private LocalDateTime currentDate() {
 		return LocalDateTime.now();
 	}
